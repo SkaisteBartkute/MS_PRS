@@ -1,4 +1,5 @@
 import sys
+import tabix
 
 # PRS calculation for multiple sclerosis.
 
@@ -18,5 +19,25 @@ def parse_base_data():
     base.close()
     return base_SNPs
 
-results = parse_base_data()
-print(results)
+# Filtering the genome positions in target data
+# to have only the genome positions that are in the GWAS file.
+
+def filter_target_data(base_SNPs):
+    # The second argument of the program is a compressed vcf
+    # target data file.
+    target_pos = []
+    target = tabix.open(sys.argv[2])
+    for SNP in base_SNPs:
+        chrom = SNP[0]
+        pos = int(SNP[1])
+        iterator = target.query(chrom, pos-1, pos)
+        target_pos.append(next(iterator))
+    return target_pos
+
+def main():
+    base = parse_base_data()
+    target = filter_target_data(base)
+    print(target)
+
+if __name__=="__main__":
+    main()
