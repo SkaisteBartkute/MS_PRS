@@ -1,5 +1,6 @@
 import sys
 import tabix
+import math
 
 # PRS calculation for multiple sclerosis.
 
@@ -34,10 +35,27 @@ def filter_target_data(base_SNPs):
         target_pos.append(next(iterator))
     return target_pos
 
+# Keeping SNPs that are below a certain p-value threshold.
+
+def filter_by_pval_threshold(base_SNPs, threshold):
+    tmp = []
+    filtered_base_SNPs = []
+    # Transforming the p-value threshold to match LP transformation.
+    transformed_threshold = math.log10(threshold) * (-1)
+    for SNP in base_SNPs:
+        # Extracting the LP (-log10 p-value for effect estimate).
+        tmp = SNP[9].split(":")
+        LP = float(tmp[2])
+        if LP > transformed_threshold:
+            filtered_base_SNPs.append(SNP)
+    return filtered_base_SNPs
+
 def main():
     base = parse_base_data()
-    target = filter_target_data(base)
-    print(target)
+    #target = filter_target_data(base)
+    #print(target)
+    filtered = filter_by_pval_threshold(base, 0.05)
+    print(filtered)
 
 if __name__=="__main__":
     main()
