@@ -35,6 +35,22 @@ def filter_target_data(base_SNPs):
         target_pos.append(next(iterator))
     return target_pos
 
+# Recoding target data sample genotypes.
+
+def recode_genotype(target_data):
+    tmp = []
+    for SNP in target_data:
+        for i in range(9, len(SNP)):
+            tmp = SNP[i].split(":")
+            if tmp[0] == "0/0":
+                SNP[i] = 1
+            elif tmp[0] == "0/1":
+                SNP[i] = 2
+            elif tmp[0] == "1/1":
+                SNP[i] = 3
+            else:
+                SNP[i] = 0
+
 # Keeping SNPs that are below a certain p-value threshold.
 
 def filter_by_pval_threshold(base_SNPs, threshold):
@@ -52,10 +68,11 @@ def filter_by_pval_threshold(base_SNPs, threshold):
 
 def main():
     base = parse_base_data()
-    #target = filter_target_data(base)
-    #print(target)
-    filtered = filter_by_pval_threshold(base, 0.05)
-    print(filtered)
+    target = filter_target_data(base)
+    #recode_genotype(target)
+    print(target)
+    #filtered = filter_by_pval_threshold(base, 0.05)
+    #print(filtered)
 
 if __name__=="__main__":
     main()
