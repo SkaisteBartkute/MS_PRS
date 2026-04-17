@@ -1,6 +1,7 @@
 import sys
 import tabix
 import math
+import numpy as np
 
 # PRS calculation for multiple sclerosis.
 
@@ -50,6 +51,10 @@ def recode_genotype(target_data):
                 SNP[i] = 3
             else:
                 SNP[i] = 0
+
+def calculate_pair_LD(SNP1, SNP2):
+    r2 = np.corrcoef(SNP1,SNP2) ** 2
+    return r2
 
 # Keeping SNPs that are below a certain p-value threshold.
 
