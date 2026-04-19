@@ -53,7 +53,7 @@ def recode_genotype(target_data):
                 SNP[i] = 0
 
 def calculate_pair_LD(SNP1, SNP2):
-    r2 = np.corrcoef(SNP1,SNP2)[0,1] ** 2
+    r2 = np.corrcoef(SNP1, SNP2)[0, 1] ** 2
     return r2
 
 # Checking for correlation between SNPs.
@@ -66,17 +66,22 @@ def LD_clump(base_data, target_data, r2_threshold, window):
         # and on the same chromosome.
         if int(base_data[i + 1][1]) - int(base_data[i][1]) < window and \
         base_data[i][0] == base_data[i+1][0]:
-           r2 = calculate_pair_LD(target_data[i][9:],target_data[i + 1][9:])
-           if r2 > r2_threshold:
-               tmp1 = base_data[i][9].split(":")
-               tmp2 = base_data[i + 1][9].split(":")
-               LP1 = float(tmp1[2])
-               LP2 = float(tmp2[2])
-               if LP1 < LP2:
-                   del base_data[i]
-               else:
-                   del base_data[i + 1]
-        i += 1
+            r2 = calculate_pair_LD(target_data[i][9:], target_data[i + 1][9:])
+            if r2 > r2_threshold:
+                tmp1 = base_data[i][9].split(":")
+                tmp2 = base_data[i + 1][9].split(":")
+                LP1 = float(tmp1[2])
+                LP2 = float(tmp2[2])
+                if LP1 < LP2:
+                    del base_data[i]
+                    del target_data[i]
+                else:
+                    del base_data[i + 1]
+                    del target_data[i + 1]
+            else:
+                i += 1
+        else:
+           i += 1
 
 # Keeping SNPs that are below a certain p-value threshold.
 
@@ -102,8 +107,9 @@ def main():
     print("--------------------------------")
     LD_clump(base, target, 0.1, 250000)
     print(base)
-    #filtered = filter_by_pval_threshold(base, 0.05)
-    #print(filtered)
+    print("--------------------------------")
+    filtered = filter_by_pval_threshold(base, 0.05)
+    print(filtered)
 
 if __name__=="__main__":
     main()
