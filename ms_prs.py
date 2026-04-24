@@ -98,6 +98,18 @@ def filter_by_pval_threshold(base_SNPs, threshold):
             filtered_base_SNPs.append(SNP)
     return filtered_base_SNPs
 
+def calculate_PRS_score(base_data, target_data):
+    scores = []
+    score = 0
+    for i in range(9,len(target_data)):
+        for j in range(0, len(base_data)):
+            tmp = base_data[j][9].split(":")
+            ES = float(tmp[0])
+            if target_data[j][i] != 0:
+                score += ES * (target_data[j][i] - 1)
+        score.append(score)
+        score = 0
+
 def main():
     base = parse_base_data()
     target = filter_target_data(base)
