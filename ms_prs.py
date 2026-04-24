@@ -98,6 +98,43 @@ def filter_by_pval_threshold(base_SNPs, threshold):
             filtered_base_SNPs.append(SNP)
     return filtered_base_SNPs
 
+# Shrinking all effect sizes according to their LD using
+# the Bayesian regression formula.
+
+def shrink_effect_sizes(base_data, target_data, window, shrinkage):
+    i = 0
+    k = 0
+    starting_point = 0
+    LD_matrix = []
+    row = []
+    ES_before = []
+    while i < starting_point + window - 1:
+        j = i + 1
+        # Storing original effect sizes of SNPs into an array.
+        tmp = base_data[i][9].split(":")
+        ES = float(tmp[0])
+        ES_before.append(ES)
+        # Calculating LD for i SNP with other SNPs in the window.
+        while j < starting_point + window:
+            r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
+            row.append(r)
+            j += 1
+        # Creating LD matrix.
+        LD_matrix.append(row)
+        row = []
+        i += 1
+    # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
+    LD_matrix = np.array(LD_matrix)
+    identity_matrix = np.identity(window)
+    identity_matrix = shrinkage * identity_matrix
+    LD_matrix = np.add(LD_matrix, identity_matrix)
+    LD_matrix = np.linalg.inv(LD_matrix)
+    # Recalculating the effect sizes using the LD matrix.
+    # Adding them to base data.
+    while k < starting_point + window - 1:
+        ES_modified = np.dot(LD_matrix[k], ES_before)
+        base_data[k].append(ES_modified)
+
 def calculate_PRS_score(base_data, target_data):
     scores = []
     score = 0
