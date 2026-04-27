@@ -102,27 +102,23 @@ def filter_by_pval_threshold(base_SNPs, threshold):
 # the Bayesian regression formula.
 
 def shrink_effect_sizes(base_data, target_data, window, shrinkage):
-    i = 0
     k = 0
     starting_point = 0
     LD_matrix = []
     row = []
     ES_before = []
-    while i < starting_point + window - 1:
-        j = i + 1
+    for i in range(starting_point, starting_point + window):
         # Storing original effect sizes of SNPs into an array.
         tmp = base_data[i][9].split(":")
         ES = float(tmp[0])
         ES_before.append(ES)
         # Calculating LD for i SNP with other SNPs in the window.
-        while j < starting_point + window:
+        for j in range(starting_point, starting_point + window):
             r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
             row.append(r)
-            j += 1
         # Creating LD matrix.
         LD_matrix.append(row)
         row = []
-        i += 1
     # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
     LD_matrix = np.array(LD_matrix)
     identity_matrix = np.identity(window)
@@ -131,9 +127,10 @@ def shrink_effect_sizes(base_data, target_data, window, shrinkage):
     LD_matrix = np.linalg.inv(LD_matrix)
     # Recalculating the effect sizes using the LD matrix.
     # Adding them to base data.
-    while k < starting_point + window - 1:
+    while k < starting_point + window:
         ES_modified = np.dot(LD_matrix[k], ES_before)
         base_data[k].append(ES_modified)
+        k += 1
 
 def calculate_PRS_score(base_data, target_data):
     scores = []
@@ -154,11 +151,13 @@ def main():
     print("--------------------------------")
     print(target)
     print("--------------------------------")
-    LD_clump(base, target, 0.1, 250000)
+    #LD_clump(base, target, 0.1, 250000)
     print(base)
     print("--------------------------------")
-    filtered = filter_by_pval_threshold(base, 0.05)
-    print(filtered)
+    #filtered = filter_by_pval_threshold(base, 0.05)
+    #print(filtered)
+    shrink_effect_sizes(base, target, 5, 0.5)
+    print(base)
 
 if __name__=="__main__":
     main()
