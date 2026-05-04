@@ -39,7 +39,7 @@ def filter_target_data(base_SNPs):
 # Checking whether the fields of SNPs from base and target data match.
 def match_SNPs(base, target):
     i = 0
-    while i < len(base) - 1:
+    while i < len(base):
         if (base[i][0] == target[i][0] and
             base[i][1] == target[i][1] and
             base[i][2] == target[i][2] and
@@ -51,6 +51,24 @@ def match_SNPs(base, target):
             print(base[i], target[i])
             del base[i]
             del target[i]
+
+# Counting the number of SNPs for each chromosome.
+def count_chromosome_SNPs(base):
+    i = 0
+    count = 0
+    SNP_count = []
+    while i < len(base) - 1:
+        if (i + 1 == len(base) - 1):
+            tmp = [base[i][0], count + 2]
+            SNP_count.append(tmp)
+        elif (base[i][0] == base[i + 1][0]):
+            count += 1
+        else:
+            tmp = [base[i][0], count + 1]
+            SNP_count.append(tmp)
+            count = 0
+        i += 1
+    return SNP_count
 
 # Recoding target data sample genotypes.
 
@@ -175,6 +193,7 @@ def main():
     base = parse_base_data()
     target = filter_target_data(base)
     match_SNPs(base, target)
+    SNP_count = count_chromosome_SNPs(base)
     recode_genotype(target)
     print("--------------------------------")
     print(target)
@@ -185,7 +204,7 @@ def main():
     #filtered = filter_by_pval_threshold(base, 0.05)
     #print(filtered)
     #shrink_effect_sizes(base, target, 5, 0.5)
-    #print(base)
+    print(SNP_count)
 
 if __name__=="__main__":
     main()
