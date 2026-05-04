@@ -36,6 +36,22 @@ def filter_target_data(base_SNPs):
         target_pos.append(next(iterator))
     return target_pos
 
+# Checking whether the fields of SNPs from base and target data match.
+def match_SNPs(base, target):
+    i = 0
+    while i < len(base) - 1:
+        if (base[i][0] == target[i][0] and
+            base[i][1] == target[i][1] and
+            base[i][2] == target[i][2] and
+            base[i][3] == target[i][3]):
+            i += 1
+        else:
+            print(f"Removing {base[i][1]} from base data and  \
+            {target[i][1]} target data. SNPs didn't match.")
+            print(base[i], target[i])
+            del base[i]
+            del target[i]
+
 # Recoding target data sample genotypes.
 
 def recode_genotype(target_data):
@@ -158,6 +174,7 @@ def calculate_PRS_score(base_data, target_data):
 def main():
     base = parse_base_data()
     target = filter_target_data(base)
+    match_SNPs(base, target)
     recode_genotype(target)
     print("--------------------------------")
     print(target)
@@ -167,8 +184,8 @@ def main():
     print("--------------------------------")
     #filtered = filter_by_pval_threshold(base, 0.05)
     #print(filtered)
-    shrink_effect_sizes(base, target, 5, 0.5)
-    print(base)
+    #shrink_effect_sizes(base, target, 5, 0.5)
+    #print(base)
 
 if __name__=="__main__":
     main()
