@@ -135,47 +135,65 @@ def filter_by_pval_threshold(base_SNPs, threshold):
 # Shrinking all effect sizes according to their LD using
 # the Bayesian regression formula.
 
-def shrink_effect_sizes(base_data, target_data, window, shrinkage):
-    starting_point = 0
-    while starting_point < 10:
-        LD_matrix = []
+def shrink_effect_sizes(base_data, target_data, window, shrinkage, starting_point):
+    LD_matrix = []
+    row = []
+    ES_before = []
+    for i in range(starting_point, starting_point + window):
+        # Storing original effect sizes of SNPs into an array.
+        tmp = base_data[i][9].split(":")
+        ES = float(tmp[0])
+        ES_before.append(ES)
+        # Calculating LD for i SNP with other SNPs in the window.
+        for j in range(starting_point, starting_point + window):
+            print(target_data[i][1], target_data[j][1])
+            r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
+            print(r)
+            row.append(r)
+        # Creating LD matrix.
+        LD_matrix.append(row)
         row = []
-        ES_before = []
-        for i in range(starting_point, starting_point + window):
-            # Storing original effect sizes of SNPs into an array.
-            tmp = base_data[i][9].split(":")
-            ES = float(tmp[0])
-            ES_before.append(ES)
-            # Calculating LD for i SNP with other SNPs in the window.
-            for j in range(starting_point, starting_point + window):
-                print(target_data[i][1], target_data[j][1])
-                r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
-                print(r)
-                row.append(r)
-            # Creating LD matrix.
-            LD_matrix.append(row)
-            row = []
-        # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
-        LD_matrix = np.array(LD_matrix)
-        print(LD_matrix)
-        identity_matrix = np.identity(window)
-        print(identity_matrix)
-        identity_matrix = shrinkage * identity_matrix
-        print(identity_matrix)
-        LD_matrix = np.add(LD_matrix, identity_matrix)
-        print(LD_matrix)
-        LD_matrix = np.linalg.inv(LD_matrix)
-        print(LD_matrix)
-        # Recalculating the effect sizes using the LD matrix.
-        # Adding them to base data.
-        print(ES_before)
-        idx = 0
-        for k in range(starting_point, starting_point + window):
-            ES_modified = np.dot(LD_matrix[idx], ES_before)
-            print(ES_modified)
-            base_data[k].append(ES_modified)
-            idx += 1
-        starting_point += window
+    # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
+    LD_matrix = np.array(LD_matrix)
+    print(LD_matrix)
+    identity_matrix = np.identity(window)
+    print(identity_matrix)
+    identity_matrix = shrinkage * identity_matrix
+    print(identity_matrix)
+    LD_matrix = np.add(LD_matrix, identity_matrix)
+    print(LD_matrix)
+    LD_matrix = np.linalg.inv(LD_matrix)
+    print(LD_matrix)
+    # Recalculating the effect sizes using the LD matrix.
+    # Adding them to base data.
+    print(ES_before)
+    idx = 0
+    for k in range(starting_point, starting_point + window):
+        ES_modified = np.dot(LD_matrix[idx], ES_before)
+        print(ES_modified)
+        base_data[k].append(ES_modified)
+        idx += 1
+
+# To account for the fact that SNP count in each chromosome isn't always
+# dividible by the window size, the last window size of the chromosome
+# needs to be recalculated (last_window).
+
+# Performing effect size shrinkage for each chromosome separately.
+
+def iterate_over_chromosomes(base_data, target_data, SNP_count, window, shrinkage):
+    starting_point = 0
+    for chrom in SNP_count:
+        last_window = chrom[1] % window
+        cycles = chrom[1] // window
+        if cycles != 0:
+           for i in range(cycles):
+               shrink_effect_sizes(base_data, target_data, window, shrinkage, \
+                                   starting_point)
+               starting_point += window
+        if last_window != 0:
+            shrink_effect_sizes(base_data, target_data, last_window, shrinkage, \
+                                starting_point)
+            starting_point += last_window
 
 def calculate_PRS_score(base_data, target_data):
     scores = []
@@ -203,8 +221,10 @@ def main():
     print("--------------------------------")
     #filtered = filter_by_pval_threshold(base, 0.05)
     #print(filtered)
-    #shrink_effect_sizes(base, target, 5, 0.5)
+    iterate_over_chromosomes(base, target, SNP_count, 5, 0.5)
     print(SNP_count)
+    print("--------------------------------")
+    print(base)
 
 if __name__=="__main__":
     main()
