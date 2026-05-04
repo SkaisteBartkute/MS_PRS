@@ -102,35 +102,46 @@ def filter_by_pval_threshold(base_SNPs, threshold):
 # the Bayesian regression formula.
 
 def shrink_effect_sizes(base_data, target_data, window, shrinkage):
-    k = 0
     starting_point = 0
-    LD_matrix = []
-    row = []
-    ES_before = []
-    for i in range(starting_point, starting_point + window):
-        # Storing original effect sizes of SNPs into an array.
-        tmp = base_data[i][9].split(":")
-        ES = float(tmp[0])
-        ES_before.append(ES)
-        # Calculating LD for i SNP with other SNPs in the window.
-        for j in range(starting_point, starting_point + window):
-            r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
-            row.append(r)
-        # Creating LD matrix.
-        LD_matrix.append(row)
+    while starting_point < 10:
+        LD_matrix = []
         row = []
-    # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
-    LD_matrix = np.array(LD_matrix)
-    identity_matrix = np.identity(window)
-    identity_matrix = shrinkage * identity_matrix
-    LD_matrix = np.add(LD_matrix, identity_matrix)
-    LD_matrix = np.linalg.inv(LD_matrix)
-    # Recalculating the effect sizes using the LD matrix.
-    # Adding them to base data.
-    while k < starting_point + window:
-        ES_modified = np.dot(LD_matrix[k], ES_before)
-        base_data[k].append(ES_modified)
-        k += 1
+        ES_before = []
+        for i in range(starting_point, starting_point + window):
+            # Storing original effect sizes of SNPs into an array.
+            tmp = base_data[i][9].split(":")
+            ES = float(tmp[0])
+            ES_before.append(ES)
+            # Calculating LD for i SNP with other SNPs in the window.
+            for j in range(starting_point, starting_point + window):
+                print(target_data[i][1], target_data[j][1])
+                r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
+                print(r)
+                row.append(r)
+            # Creating LD matrix.
+            LD_matrix.append(row)
+            row = []
+        # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
+        LD_matrix = np.array(LD_matrix)
+        print(LD_matrix)
+        identity_matrix = np.identity(window)
+        print(identity_matrix)
+        identity_matrix = shrinkage * identity_matrix
+        print(identity_matrix)
+        LD_matrix = np.add(LD_matrix, identity_matrix)
+        print(LD_matrix)
+        LD_matrix = np.linalg.inv(LD_matrix)
+        print(LD_matrix)
+        # Recalculating the effect sizes using the LD matrix.
+        # Adding them to base data.
+        print(ES_before)
+        idx = 0
+        for k in range(starting_point, starting_point + window):
+            ES_modified = np.dot(LD_matrix[idx], ES_before)
+            print(ES_modified)
+            base_data[k].append(ES_modified)
+            idx += 1
+        starting_point += window
 
 def calculate_PRS_score(base_data, target_data):
     scores = []
