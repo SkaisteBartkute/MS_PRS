@@ -104,12 +104,15 @@ def LD_clump(base_data, target_data, r2_threshold, window):
             if r2 > r2_threshold:
                 tmp1 = base_data[i][9].split(":")
                 tmp2 = base_data[i + 1][9].split(":")
+                print(base_data[i], base_data[i + 1])
                 LP1 = float(tmp1[2])
                 LP2 = float(tmp2[2])
                 if LP1 < LP2:
+                    print(base_data[i])
                     del base_data[i]
                     del target_data[i]
                 else:
+                    print(base_data[i + 1])
                     del base_data[i + 1]
                     del target_data[i + 1]
             else:
@@ -198,14 +201,15 @@ def iterate_over_chromosomes(base_data, target_data, SNP_count, window, shrinkag
 def calculate_PRS_score(base_data, target_data):
     scores = []
     score = 0
-    for i in range(9,len(target_data)):
+    for i in range(9,len(target_data[0])):
         for j in range(0, len(base_data)):
             tmp = base_data[j][9].split(":")
             ES = float(tmp[0])
             if target_data[j][i] != 0:
                 score += ES * (target_data[j][i] - 1)
-        score.append(score)
+        scores.append(score)
         score = 0
+    return scores
 
 def main():
     base = parse_base_data()
@@ -219,12 +223,14 @@ def main():
     #LD_clump(base, target, 0.1, 250000)
     print(base)
     print("--------------------------------")
-    #filtered = filter_by_pval_threshold(base, 0.05)
-    #print(filtered)
+    filtered = filter_by_pval_threshold(base, 0.01)
+    print(filtered)
+    print("--------------------------------")
     iterate_over_chromosomes(base, target, SNP_count, 5, 0.5)
     print(SNP_count)
     print("--------------------------------")
     print(base)
+    print("--------------------------------")
 
 if __name__=="__main__":
     main()
