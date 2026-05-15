@@ -27,13 +27,19 @@ def parse_base_data():
 def filter_target_data(base_SNPs):
     # The second argument of the program is a compressed vcf
     # target data file.
+    i = 0
     target_pos = []
     target = tabix.open(sys.argv[2])
-    for SNP in base_SNPs:
-        chrom = SNP[0]
-        pos = int(SNP[1])
+    while i < len(base_SNPs):
+        chrom = base_SNPs[i][0]
+        pos = int(base_SNPs[i][1])
         iterator = target.query(chrom, pos-1, pos)
-        target_pos.append(next(iterator))
+        if not iterator:
+            print("Target chromosome position not found.")
+            del base_SNPs[i]
+        else:
+            target_pos.append(next(iterator))
+            i += 1
     return target_pos
 
 # Checking whether the fields of SNPs from base and target data match.
