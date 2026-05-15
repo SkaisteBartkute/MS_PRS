@@ -220,8 +220,18 @@ def thresholding_by_pvalue_PRS(p_value):
     scores = calculate_PRS_score(filtered, target)
     print(scores)
 
+def choose_command_line_option(option):
+    if option == "p_val_threshold":
+        p_val = sys.argv[4]
+        if p_val:
+            thresholding_by_pvalue_PRS(float(p_val))
+        else:
+            print("Missing p-value threshold.")
+    else:
+        print("Missing options.")
+
 def main():
-    thresholding_by_pvalue_PRS(0.55)
+    choose_command_line_option(sys.argv[3])
 
 if __name__=="__main__":
     main()
