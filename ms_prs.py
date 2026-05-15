@@ -78,11 +78,11 @@ def recode_genotype(target_data):
         for i in range(9, len(SNP)):
             tmp = SNP[i].split(":")
             if tmp[0] == "0/0":
+                SNP[i] = 0
+            elif tmp[0] == "0/1" or tmp[0] == "1/0":
                 SNP[i] = 1
-            elif tmp[0] == "0/1":
-                SNP[i] = 2
             elif tmp[0] == "1/1":
-                SNP[i] = 3
+                SNP[i] = 2
             else:
                 SNP[i] = 0
 
@@ -205,32 +205,23 @@ def calculate_PRS_score(base_data, target_data):
         for j in range(0, len(base_data)):
             tmp = base_data[j][9].split(":")
             ES = float(tmp[0])
-            if target_data[j][i] != 0:
-                score += ES * (target_data[j][i] - 1)
+            score += ES * target_data[j][i]
         scores.append(score)
         score = 0
     return scores
+    
+def thresholding_by_pvalue_PRS(p_value):
+    base = parse_base_data()
+    filtered = filter_by_pval_threshold(base, p_value)
+    target = filter_target_data(filtered)
+    SNP_count = count_chromosome_SNPs(filtered)
+    match_SNPs(filtered, target)
+    recode_genotype(target)
+    scores = calculate_PRS_score(filtered, target)
+    print(scores)
 
 def main():
-    base = parse_base_data()
-    target = filter_target_data(base)
-    match_SNPs(base, target)
-    SNP_count = count_chromosome_SNPs(base)
-    recode_genotype(target)
-    print("--------------------------------")
-    print(target)
-    print("--------------------------------")
-    #LD_clump(base, target, 0.1, 250000)
-    print(base)
-    print("--------------------------------")
-    filtered = filter_by_pval_threshold(base, 0.01)
-    print(filtered)
-    print("--------------------------------")
-    iterate_over_chromosomes(base, target, SNP_count, 5, 0.5)
-    print(SNP_count)
-    print("--------------------------------")
-    print(base)
-    print("--------------------------------")
+    thresholding_by_pvalue_PRS(0.55)
 
 if __name__=="__main__":
     main()
