@@ -52,9 +52,9 @@ def match_SNPs(base, target):
             base[i][3] == target[i][3]):
             i += 1
         else:
-            print(f"Removing {base[i][1]} from base data and  \
-            {target[i][1]} target data. SNPs didn't match.")
-            print(base[i], target[i])
+            #print(f"Removing {base[i][1]} from base data and  \
+            #{target[i][1]} target data. SNPs didn't match.")
+            #print(base[i], target[i])
             del base[i]
             del target[i]
 
@@ -215,7 +215,7 @@ def calculate_PRS_score(base_data, target_data):
         scores.append(score)
         score = 0
     return scores
-    
+
 def thresholding_by_pvalue_PRS(p_value):
     base = parse_base_data()
     filtered = filter_by_pval_threshold(base, p_value)
@@ -224,7 +224,13 @@ def thresholding_by_pvalue_PRS(p_value):
     match_SNPs(filtered, target)
     recode_genotype(target)
     scores = calculate_PRS_score(filtered, target)
-    print(scores)
+    print(*scores, sep = ', ')
+    SNP_count = count_chromosome_SNPs(filtered)
+    print(*SNP_count)
+    # Printing used SNPs for PRS calculation.
+    for SNP in filtered:
+        print(SNP[0], SNP[1], SNP[2])
+    print(filtered[len(filtered)-1],target[len(filtered)-1])
 
 def choose_command_line_option(option):
     if option == "p_val_threshold":
