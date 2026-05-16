@@ -216,6 +216,18 @@ def calculate_PRS_score(base_data, target_data):
         score = 0
     return scores
 
+def calculate_PRS_SE(base_data, target_data):
+    prs_se_all = []
+    prs_se = 0
+    for i in range(9,len(target_data[0])):
+        for j in range(0, len(base_data)):
+            tmp = base_data[j][9].split(":")
+            SE = float(tmp[1])
+            prs_se += (SE**2) * (target_data[j][i]**2)
+        prs_se_all.append(prs_se)
+        prs_se = 0
+    return prs_se_all
+
 def thresholding_by_pvalue_PRS(p_value):
     base = parse_base_data()
     filtered = filter_by_pval_threshold(base, p_value)
@@ -225,6 +237,9 @@ def thresholding_by_pvalue_PRS(p_value):
     recode_genotype(target)
     scores = calculate_PRS_score(filtered, target)
     print(*scores, sep = ', ')
+    print("------------------------------------")
+    prs_se =  calculate_PRS_SE(filtered, target)
+    print(*prs_se, sep = ', ')
     SNP_count = count_chromosome_SNPs(filtered)
     print(*SNP_count)
     # Printing used SNPs for PRS calculation.
