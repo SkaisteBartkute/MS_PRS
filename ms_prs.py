@@ -34,11 +34,13 @@ def filter_target_data(base_SNPs):
         chrom = base_SNPs[i][0]
         pos = int(base_SNPs[i][1])
         iterator = target.query(chrom, pos-1, pos)
-        if not iterator:
-            print("Target chromosome position not found.")
+        exists = next(iterator, None)
+        if not exists:
+            print("Target chromosome position not found. Deleting base SNP:")
+            print(base_SNPs[i])
             del base_SNPs[i]
         else:
-            target_pos.append(next(iterator))
+            target_pos.append(exists)
             i += 1
     return target_pos
 
