@@ -51,7 +51,8 @@ def match_SNPs(base, target):
         if (base[i][0] == target[i][0] and
             base[i][1] == target[i][1] and
             base[i][2] == target[i][2] and
-            base[i][3] == target[i][3]):
+            base[i][3] == target[i][3] and
+            base[i][4] == target[i][4] ):
             i += 1
         else:
             #print(f"Removing {base[i][1]} from base data and  \
@@ -242,11 +243,14 @@ def thresholding_by_pvalue_PRS(p_value):
     print("------------------------------------")
     prs_se =  calculate_PRS_SE(filtered, target)
     print(*prs_se, sep = ', ')
-    SNP_count = count_chromosome_SNPs(filtered)
-    print(*SNP_count)
+    base_SNP_count = count_chromosome_SNPs(filtered)
+    print(*base_SNP_count)
+    target_SNP_count = count_chromosome_SNPs(target)
+    print(*target_SNP_count)
     # Printing used SNPs for PRS calculation.
-    for SNP in filtered:
-        print(SNP[0], SNP[1], SNP[2])
+    for i in range(0, len(filtered)):
+        print(filtered[i][0], filtered[i][1], filtered[i][2], filtered[i][3], filtered[i][4], \
+              target[i][0], target[i][1], target[i][2], target[i][3], target[i][4])
     print(filtered[len(filtered)-1],target[len(filtered)-1])
 
 def choose_command_line_option(option):
