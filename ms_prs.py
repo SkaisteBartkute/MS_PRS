@@ -96,8 +96,12 @@ def recode_genotype(target_data):
                 SNP[i] = 0
 
 def calculate_pair_LD(SNP1, SNP2):
-    r2 = np.corrcoef(SNP1, SNP2)[0, 1] ** 2
-    return r2
+    if np.std(SNP1) == 0 or np.std(SNP2) == 0:
+        print("Can't calculate exact correlation.")
+        return 0
+    else:
+        r2 = np.corrcoef(SNP1, SNP2)[0, 1] ** 2
+        return r2
 
 # Checking for correlation between SNPs.
 # Removing the less significant SNP if a pair of SNPs is correlated.
@@ -113,15 +117,12 @@ def LD_clump(base_data, target_data, r2_threshold, window):
             if r2 > r2_threshold:
                 tmp1 = base_data[i][9].split(":")
                 tmp2 = base_data[i + 1][9].split(":")
-                print(base_data[i], base_data[i + 1])
                 LP1 = float(tmp1[2])
                 LP2 = float(tmp2[2])
                 if LP1 < LP2:
-                    print(base_data[i])
                     del base_data[i]
                     del target_data[i]
                 else:
-                    print(base_data[i + 1])
                     del base_data[i + 1]
                     del target_data[i + 1]
             else:
@@ -253,6 +254,31 @@ def thresholding_by_pvalue_PRS(p_value):
               target[i][0], target[i][1], target[i][2], target[i][3], target[i][4])
     print(filtered[len(filtered)-1],target[len(filtered)-1])
 
+def LD_clumping_PRS(threshold):
+    base = parse_base_data()
+    target = filter_target_data(base)
+    SNP_count_before = count_chromosome_SNPs(base)
+    print(*SNP_count_before)
+    match_SNPs(base, target)
+    SNP_count_after = count_chromosome_SNPs(base)
+    print(*SNP_count_after)
+    recode_genotype(target)
+    LD_clump(base, target, threshold, 250000)
+    scores = calculate_PRS_score(base, target)
+    print(*scores, sep = ', ')
+    print("-------------------------------------")
+    prs_se = calculate_PRS_SE(base, target)
+    print(*prs_se, sep = ', ')
+    base_SNP_count = count_chromosome_SNPs(base)
+    print(*base_SNP_count)
+    target_SNP_count = count_chromosome_SNPs(target)
+    print(*target_SNP_count)
+    # Printing used SNPs for PRS calculation.
+    for i in range(0, len(base)):
+        print(base[i][0], base[i][1], base[i][2], base[i][3], base[i][4], \
+              target[i][0], target[i][1], target[i][2], target[i][3], target[i][4])
+    print(base[len(base)-1],target[len(base)-1])
+
 def choose_command_line_option(option):
     if option == "p_val_threshold":
         p_val = sys.argv[4]
@@ -260,6 +286,12 @@ def choose_command_line_option(option):
             thresholding_by_pvalue_PRS(float(p_val))
         else:
             print("Missing p-value threshold.")
+    elif option == "LD_clump":
+        threshold = sys.argv[4]
+        if threshold:
+            LD_clumping_PRS(float(threshold))
+        else:
+            print("Missing LD clumping threshold.")
     else:
         print("Missing options.")
 
