@@ -228,7 +228,7 @@ def calculate_PRS_SE(base_data, target_data):
             tmp = base_data[j][9].split(":")
             SE = float(tmp[1])
             prs_se += (SE**2) * (target_data[j][i]**2)
-        prs_se_all.append(prs_se)
+        prs_se_all.append(math.sqrt(prs_se))
         prs_se = 0
     return prs_se_all
 
