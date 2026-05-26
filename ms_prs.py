@@ -279,6 +279,32 @@ def LD_clumping_PRS(threshold):
               target[i][0], target[i][1], target[i][2], target[i][3], target[i][4])
     print(base[len(base)-1],target[len(base)-1])
 
+def thresholding_and_LD_clumping_PRS(p_value, r2):
+    base = parse_base_data()
+    filtered = filter_by_pval_threshold(base, p_value)
+    target = filter_target_data(filtered)
+    SNP_count_before = count_chromosome_SNPs(filtered)
+    print(*SNP_count_before)
+    match_SNPs(filtered, target)
+    SNP_count_after = count_chromosome_SNPs(filtered)
+    print(*SNP_count_after)
+    recode_genotype(target)
+    LD_clump(filtered, target, r2, 250000)
+    scores = calculate_PRS_score(filtered, target)
+    print(*scores, sep = ', ')
+    print("-------------------------------------")
+    prs_se = calculate_PRS_SE(filtered, target)
+    print(*prs_se, sep = ', ')
+    base_SNP_count = count_chromosome_SNPs(filtered)
+    print(*base_SNP_count)
+    target_SNP_count = count_chromosome_SNPs(target)
+    print(*target_SNP_count)
+    # Printing used SNPs for PRS calculation.
+    for i in range(0, len(filtered)):
+        print(filtered[i][0], filtered[i][1], filtered[i][2], filtered[i][3], filtered[i][4], \
+              target[i][0], target[i][1], target[i][2], target[i][3], target[i][4])
+    print(filtered[len(filtered)-1],target[len(filtered)-1])
+
 def choose_command_line_option(option):
     if option == "p_val_threshold":
         p_val = sys.argv[4]
@@ -292,6 +318,13 @@ def choose_command_line_option(option):
             LD_clumping_PRS(float(threshold))
         else:
             print("Missing LD clumping threshold.")
+    elif option == "p_val_LD_clump":
+        p_val = sys.argv[4]
+        r2 = sys.argv[5]
+        if p_val and r2:
+            thresholding_and_LD_clumping_PRS(float(p_val), float(r2))
+        else:
+            print("Missing p-value and/or LD clumping thresholds.")
     else:
         print("Missing options.")
 
