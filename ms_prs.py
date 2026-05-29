@@ -159,31 +159,22 @@ def shrink_effect_sizes(base_data, target_data, window, shrinkage, starting_poin
         ES_before.append(ES)
         # Calculating LD for i SNP with other SNPs in the window.
         for j in range(starting_point, starting_point + window):
-            print(target_data[i][1], target_data[j][1])
             r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
-            print(r)
             row.append(r)
         # Creating LD matrix.
         LD_matrix.append(row)
         row = []
     # Applying the Bayesian formula: (LD + shrinkage * I)^(-1)
     LD_matrix = np.array(LD_matrix)
-    print(LD_matrix)
     identity_matrix = np.identity(window)
-    print(identity_matrix)
     identity_matrix = shrinkage * identity_matrix
-    print(identity_matrix)
     LD_matrix = np.add(LD_matrix, identity_matrix)
-    print(LD_matrix)
     LD_matrix = np.linalg.inv(LD_matrix)
-    print(LD_matrix)
     # Recalculating the effect sizes using the LD matrix.
     # Adding them to base data.
-    print(ES_before)
     idx = 0
     for k in range(starting_point, starting_point + window):
         ES_modified = np.dot(LD_matrix[idx], ES_before)
-        print(ES_modified)
         base_data[k].append(ES_modified)
         idx += 1
 
@@ -216,6 +207,16 @@ def calculate_PRS_score(base_data, target_data):
             tmp = base_data[j][9].split(":")
             ES = float(tmp[0])
             score += ES * target_data[j][i]
+        scores.append(score)
+        score = 0
+    return scores
+
+def calculate_shrunk_PRS_score(base_data, target_data):
+    scores = []
+    score = 0
+    for i in range(9,len(target_data[0])):
+        for j in range(0, len(base_data)):
+            score += base_data[j][10] * target_data[j][i]
         scores.append(score)
         score = 0
     return scores
@@ -329,7 +330,23 @@ def choose_command_line_option(option):
         print("Missing options.")
 
 def main():
-    choose_command_line_option(sys.argv[3])
+#    choose_command_line_option(sys.argv[3])
+     base = parse_base_data()
+     target = filter_target_data(base)
+     #print(target)
+     SNP_count = count_chromosome_SNPs(base)
+     print(SNP_count)
+     recode_genotype(target)
+     match_SNPs(base, target)
+     print(base)
+     SNP_count = count_chromosome_SNPs(base)
+     print(SNP_count)
+     iterate_over_chromosomes(base, target, SNP_count, 5, 0.5)
+     print(base)
+     scores = calculate_shrunk_PRS_score(base, target)
+     print(*scores, sep = ',')
+     prs_se = calculate_PRS_SE(base, target)
+     print(*prs_se, sep = ',')
 
 if __name__=="__main__":
     main()
