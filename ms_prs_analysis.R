@@ -346,4 +346,43 @@ z_ms_prs_LD_010_se <- sd(z_ms_prs_LD_010_scores) / sqrt(length(z_ms_prs_LD_010_s
 print("Normalizuotų įverčių standartinė paklaida:")
 z_ms_prs_LD_010_se
 
+z_scores_LD <- data.frame(
+  z_ms_prs_pval_001_LD_010_scores = z_ms_prs_pval_001_LD_010_scores,
+  z_ms_prs_pval_005_LD_010_scores = z_ms_prs_pval_005_LD_010_scores,
+  z_ms_prs_pval_010_LD_010_scores = z_ms_prs_pval_010_LD_010_scores,
+  z_ms_prs_pval_050_LD_010_scores = z_ms_prs_pval_050_LD_010_scores,
+  z_ms_prs_LD_010_scores = z_ms_prs_LD_010_scores
+)
 
+z_scores_LD$number <- 1:nrow(z_scores_LD)
+
+z_scores_LD$number <- factor(z_scores_LD$number, levels = z_scores_LD$number)
+z_scores_LD
+
+z_scores_LD_long <- reshape(z_scores_LD,
+                              direction = "long",
+                              idvar = "number",
+                              varying = list(names(z_scores_LD)[1:5]),
+                              v.names = "scores",
+                              timevar = "p_val",
+                              times = c("p_val_001_LD_010","p_val_005_LD_010","p_val_010_LD_010","p_val_050_LD_010", "LD_010"))
+z_scores_LD_long
+
+z_scores_LD_graph <- ggplot(z_scores_LD_long, aes(x = factor(number), y = scores, fill = p_val)) +
+                         geom_col(position = "stack") +
+                         coord_flip() +
+                         labs(x = "Tiriamieji",
+                              y = "Standartinio nuokrypio vienetai",
+                              title = "Normalizuoti genetinės rizikos įverčiai") +
+                         theme_minimal() +
+                         theme(panel.grid.major.y = element_blank(),
+                               axis.text.y = element_blank(),
+                               plot.title = element_text(size = 18, hjust = 0.5, margin = margin(t = 20, b = 20)),
+                               axis.title = element_text(size = 14, hjust = 0.5, margin = margin(t = 20, b = 20)),
+                               axis.title.x = element_text(margin = margin(t = 20, b = 20), face = "italic"),
+                               axis.title.y = element_text(margin = margin(t = 20, b = 20), face = "italic"),
+                               legend.position = "bottom") +
+                         scale_fill_discrete(labels = c("0.01", "0.05", "0.1", "0.5", "visi VNP")) +
+                         labs(fill = "p-reikšmė, r2 = 0.1")
+
+ggsave("~/grafikai/LD_scores.png", plot = z_scores_LD_graph, bg = "white")
