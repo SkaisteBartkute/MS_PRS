@@ -134,5 +134,44 @@ z_ms_prs_pval_050_se <- sd(z_ms_prs_pval_050_scores) / sqrt(length(z_ms_prs_pval
 print("Normalizuotų įverčių standartinė paklaida:")
 z_ms_prs_pval_050_se
 
+library(ggplot2)
 
+z_scores_pval <- data.frame(
+  z_ms_prs_pval_001_scores = z_ms_prs_pval_001_scores,
+  z_ms_prs_pval_005_scores = z_ms_prs_pval_005_scores,
+  z_ms_prs_pval_010_scores = z_ms_prs_pval_010_scores,
+  z_ms_prs_pval_050_scores = z_ms_prs_pval_050_scores
+)
 
+z_scores_pval$number <- 1:nrow(z_scores_pval)
+
+z_scores_pval$number <- factor(z_scores_pval$number, levels = z_scores_pval$number)
+z_scores_pval
+
+z_scores_pval_long <- reshape(z_scores_pval,
+                              direction = "long",
+                              idvar = "number",
+                              varying = list(names(z_scores_pval)[1:4]),
+                              v.names = "scores",
+                              timevar = "p_val",
+                              times = c("p_val_001","p_val_005","p_val_010","p_val_050"))
+z_scores_pval_long
+
+z_scores_pval_graph <- ggplot(z_scores_pval_long, aes(x = factor(number), y = scores, fill = p_val)) +
+                         geom_col(position = "stack") +
+                         coord_flip() +
+                         labs(x = "Tiriamieji",
+                              y = "Standartinio nuokrypio vienetai",
+                              title = "Normalizuoti genetinės rizikos įverčiai") +
+                         theme_minimal() +
+                         theme(panel.grid.major.y = element_blank(),
+                               axis.text.y = element_blank(),
+                               plot.title = element_text(size = 18, hjust = 0.5, margin = margin(t = 20, b = 20)),
+                               axis.title = element_text(size = 14, hjust = 0.5, margin = margin(t = 20, b = 20)),
+                               axis.title.x = element_text(margin = margin(t = 20, b = 20), face = "italic"),
+                               axis.title.y = element_text(margin = margin(t = 20, b = 20), face = "italic"),
+                               legend.position = "bottom") +
+                         scale_fill_discrete(labels = c("0.01", "0.05", "0.1", "0.5")) +
+                         labs(fill = "p-reikšmė")
+
+ggsave("~/grafikai/p_val_scores.png", plot = z_scores_pval_graph, bg = "white")
