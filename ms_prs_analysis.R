@@ -175,3 +175,175 @@ z_scores_pval_graph <- ggplot(z_scores_pval_long, aes(x = factor(number), y = sc
                          labs(fill = "p-reikšmė")
 
 ggsave("~/grafikai/p_val_scores.png", plot = z_scores_pval_graph, bg = "white")
+
+ms_prs_pval_001_LD_010_scores <- scan("~/rezultatai/ms_prs_pval_001_LD_010_scores.txt")
+print("Filtravimo su p reikšme 0.01 ir r2 0.1 įverčiai:")
+ms_prs_pval_001_LD_010_scores
+
+print("Vidurkis:")
+mean(ms_prs_pval_001_LD_010_scores)
+print("Mediana:")
+median(ms_prs_pval_001_LD_010_scores)
+print("Minimumas:")
+min(ms_prs_pval_001_LD_010_scores)
+print("Maksimumas:")
+max(ms_prs_pval_001_LD_010_scores)
+print("Standartinis nuokrypis:")
+sd(ms_prs_pval_001_LD_010_scores)
+
+ms_prs_pval_001_LD_010_se <- sd(ms_prs_pval_001_LD_010_scores) / sqrt(length(ms_prs_pval_001_LD_010_scores))
+print("Standartinė paklaida:")
+ms_prs_pval_001_LD_010_se
+
+z_ms_prs_pval_001_LD_010_scores <- as.numeric(scale(ms_prs_pval_001_LD_010_scores))
+print("Normalizuoti filtravimo su p reikšme 0.01 ir r2 0.1 įverčiai:")
+z_ms_prs_pval_001_LD_010_scores
+
+print("Normalizuotų įverčių vidurkis:")
+median(z_ms_prs_pval_001_LD_010_scores)
+print("Normalizuotų įverčių minimumas:")
+min(z_ms_prs_pval_001_LD_010_scores)
+print("Normalizuotų įverčių maksimumas:")
+max(z_ms_prs_pval_001_LD_010_scores)
+
+z_ms_prs_pval_001_LD_010_se <- sd(z_ms_prs_pval_001_LD_010_scores) / sqrt(length(z_ms_prs_pval_001_LD_010_scores))
+print("Normalizuotų įverčių standartinė paklaida:")
+z_ms_prs_pval_001_LD_010_se
+
+ms_prs_pval_005_LD_010_scores <- scan("~/rezultatai/ms_prs_pval_005_LD_010_scores.txt")
+print("Filtravimo su p reikšme 0.05 ir r2 0.1 įverčiai:")
+ms_prs_pval_005_LD_010_scores
+
+print("Vidurkis:")
+mean(ms_prs_pval_005_LD_010_scores)
+print("Mediana:")
+median(ms_prs_pval_005_LD_010_scores)
+print("Minimumas:")
+min(ms_prs_pval_005_LD_010_scores)
+print("Maksimumas:")
+max(ms_prs_pval_005_LD_010_scores)
+print("Standartinis nuokrypis:")
+sd(ms_prs_pval_005_LD_010_scores)
+
+ms_prs_pval_005_LD_010_se <- sd(ms_prs_pval_005_LD_010_scores) / sqrt(length(ms_prs_pval_005_LD_010_scores))
+print("Standartinė paklaida:")
+ms_prs_pval_005_LD_010_se
+
+z_ms_prs_pval_005_LD_010_scores <- as.numeric(scale(ms_prs_pval_005_LD_010_scores))
+print("Normalizuoti filtravimo su p reikšme 0.05 ir r2 0.1 įverčiai:")
+z_ms_prs_pval_005_LD_010_scores
+
+print("Normalizuotų įverčių vidurkis:")
+median(z_ms_prs_pval_005_LD_010_scores)
+print("Normalizuotų įverčių minimumas:")
+min(z_ms_prs_pval_005_LD_010_scores)
+print("Normalizuotų įverčių maksimumas:")
+max(z_ms_prs_pval_005_LD_010_scores)
+
+z_ms_prs_pval_005_LD_010_se <- sd(z_ms_prs_pval_005_LD_010_scores) / sqrt(length(z_ms_prs_pval_005_LD_010_scores))
+print("Normalizuotų įverčių standartinė paklaida:")
+z_ms_prs_pval_005_LD_010_se
+
+ms_prs_pval_010_LD_010_scores <- scan("~/rezultatai/ms_prs_pval_010_LD_010_scores.txt")
+print("Filtravimo su p reikšme 0.1 ir r2 0.1 įverčiai:")
+ms_prs_pval_010_LD_010_scores
+
+print("Vidurkis:")
+mean(ms_prs_pval_010_LD_010_scores)
+print("Mediana:")
+median(ms_prs_pval_010_LD_010_scores)
+print("Minimumas:")
+min(ms_prs_pval_010_LD_010_scores)
+print("Maksimumas:")
+max(ms_prs_pval_010_LD_010_scores)
+print("Standartinis nuokrypis:")
+sd(ms_prs_pval_010_LD_010_scores)
+
+ms_prs_pval_010_LD_010_se <- sd(ms_prs_pval_010_LD_010_scores) / sqrt(length(ms_prs_pval_010_LD_010_scores))
+print("Standartinė paklaida:")
+ms_prs_pval_010_LD_010_se
+
+z_ms_prs_pval_010_LD_010_scores <- as.numeric(scale(ms_prs_pval_010_LD_010_scores))
+print("Normalizuoti filtravimo su p reikšme 0.1 ir r2 0.1 įverčiai:")
+z_ms_prs_pval_010_LD_010_scores
+
+print("Normalizuotų įverčių vidurkis:")
+median(z_ms_prs_pval_010_LD_010_scores)
+print("Normalizuotų įverčių minimumas:")
+min(z_ms_prs_pval_010_LD_010_scores)
+print("Normalizuotų įverčių maksimumas:")
+max(z_ms_prs_pval_010_LD_010_scores)
+
+z_ms_prs_pval_010_LD_010_se <- sd(z_ms_prs_pval_010_LD_010_scores) / sqrt(length(z_ms_prs_pval_010_LD_010_scores))
+print("Normalizuotų įverčių standartinė paklaida:")
+z_ms_prs_pval_010_LD_010_se
+
+ms_prs_pval_050_LD_010_scores <- scan("~/rezultatai/ms_prs_pval_050_LD_010_scores.txt")
+print("Filtravimo su p reikšme 0.5 ir r2 0.1 įverčiai:")
+ms_prs_pval_050_LD_010_scores
+
+print("Vidurkis:")
+mean(ms_prs_pval_050_LD_010_scores)
+print("Mediana:")
+median(ms_prs_pval_050_LD_010_scores)
+print("Minimumas:")
+min(ms_prs_pval_050_LD_010_scores)
+print("Maksimumas:")
+max(ms_prs_pval_050_LD_010_scores)
+print("Standartinis nuokrypis:")
+sd(ms_prs_pval_050_LD_010_scores)
+
+ms_prs_pval_050_LD_010_se <- sd(ms_prs_pval_050_LD_010_scores) / sqrt(length(ms_prs_pval_050_LD_010_scores))
+print("Standartinė paklaida:")
+ms_prs_pval_050_LD_010_se
+
+z_ms_prs_pval_050_LD_010_scores <- as.numeric(scale(ms_prs_pval_050_LD_010_scores))
+print("Normalizuoti filtravimo su p reikšme 0.5 ir r2 0.1 įverčiai:")
+z_ms_prs_pval_050_LD_010_scores
+
+print("Normalizuotų įverčių vidurkis:")
+median(z_ms_prs_pval_050_LD_010_scores)
+print("Normalizuotų įverčių minimumas:")
+min(z_ms_prs_pval_050_LD_010_scores)
+print("Normalizuotų įverčių maksimumas:")
+max(z_ms_prs_pval_050_LD_010_scores)
+
+z_ms_prs_pval_050_LD_010_se <- sd(z_ms_prs_pval_050_LD_010_scores) / sqrt(length(z_ms_prs_pval_050_LD_010_scores))
+print("Normalizuotų įverčių standartinė paklaida:")
+z_ms_prs_pval_050_LD_010_se
+
+ms_prs_LD_010_scores <- scan("~/rezultatai/ms_prs_LD_010_scores.txt")
+print("Filtravimo su r2 0.1 įverčiai:")
+ms_prs_LD_010_scores
+
+print("Vidurkis:")
+mean(ms_prs_LD_010_scores)
+print("Mediana:")
+median(ms_prs_LD_010_scores)
+print("Minimumas:")
+min(ms_prs_LD_010_scores)
+print("Maksimumas:")
+max(ms_prs_LD_010_scores)
+print("Standartinis nuokrypis:")
+sd(ms_prs_LD_010_scores)
+
+ms_prs_LD_010_se <- sd(ms_prs_LD_010_scores) / sqrt(length(ms_prs_LD_010_scores))
+print("Standartinė paklaida:")
+ms_prs_LD_010_se
+
+z_ms_prs_LD_010_scores <- as.numeric(scale(ms_prs_LD_010_scores))
+print("Normalizuoti filtravimo su r2 0.1 įverčiai:")
+z_ms_prs_LD_010_scores
+
+print("Normalizuotų įverčių vidurkis:")
+median(z_ms_prs_LD_010_scores)
+print("Normalizuotų įverčių minimumas:")
+min(z_ms_prs_LD_010_scores)
+print("Normalizuotų įverčių maksimumas:")
+max(z_ms_prs_LD_010_scores)
+
+z_ms_prs_LD_010_se <- sd(z_ms_prs_LD_010_scores) / sqrt(length(z_ms_prs_LD_010_scores))
+print("Normalizuotų įverčių standartinė paklaida:")
+z_ms_prs_LD_010_se
+
+
