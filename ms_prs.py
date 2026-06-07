@@ -100,8 +100,8 @@ def calculate_pair_LD(SNP1, SNP2):
         print("Can't calculate exact correlation.")
         return 0
     else:
-        r2 = np.corrcoef(SNP1, SNP2)[0, 1] ** 2
-        return r2
+        r = np.corrcoef(SNP1, SNP2)[0, 1]
+        return r
 
 # Checking for correlation between SNPs.
 # Removing the less significant SNP if a pair of SNPs is correlated.
@@ -113,7 +113,7 @@ def LD_clump(base_data, target_data, r2_threshold, window):
         # and on the same chromosome.
         if int(base_data[i + 1][1]) - int(base_data[i][1]) < window and \
         base_data[i][0] == base_data[i+1][0]:
-            r2 = calculate_pair_LD(target_data[i][9:], target_data[i + 1][9:])
+            r2 = calculate_pair_LD(target_data[i][9:], target_data[i + 1][9:]) ** 2
             if r2 > r2_threshold:
                 tmp1 = base_data[i][9].split(":")
                 tmp2 = base_data[i + 1][9].split(":")
@@ -159,7 +159,7 @@ def shrink_effect_sizes(base_data, target_data, window, shrinkage, starting_poin
         ES_before.append(ES)
         # Calculating LD for i SNP with other SNPs in the window.
         for j in range(starting_point, starting_point + window):
-            r = math.sqrt(calculate_pair_LD(target_data[i][9:], target_data[j][9:]))
+            r = calculate_pair_LD(target_data[i][9:], target_data[j][9:])
             row.append(r)
         # Creating LD matrix.
         LD_matrix.append(row)
