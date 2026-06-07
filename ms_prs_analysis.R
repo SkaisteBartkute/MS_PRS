@@ -383,11 +383,11 @@ z_scores_LD_graph <- ggplot(z_scores_LD_long, aes(x = factor(number), y = scores
                                axis.title.y = element_text(margin = margin(t = 20, b = 20), face = "italic"),
                                legend.position = "bottom") +
                          scale_fill_discrete(labels = c("0.01", "0.05", "0.1", "0.5", "visi VNP")) +
-                         labs(fill = "p-reikšmė, r2 = 0.1")
+                         labs(fill = "r2 = 0.1, p-reikšmė")
 
 ggsave("~/grafikai/LD_scores.png", plot = z_scores_LD_graph, bg = "white")
 
-ms_prs_pval_010_shrink_050_scores <- scan("~/rezultatai/ms_prs_010_shrink_050_scores.txt")
+ms_prs_pval_010_shrink_050_scores <- scan("~/rezultatai/ms_prs_pval_010_shrink_050_scores.txt")
 print("Filtravimo su p-reikšme 0.1 ir shrink parametru 0.5 įverčiai:")
 ms_prs_pval_010_shrink_050_scores
 
@@ -421,7 +421,7 @@ z_ms_prs_pval_010_shrink_050_se <- sd(z_ms_prs_pval_010_shrink_050_scores) / sqr
 print("Normalizuotų įverčių standartinė paklaida:")
 z_ms_prs_pval_010_shrink_050_se
 
-ms_prs_pval_010_shrink_200_scores <- scan("~/rezultatai/ms_prs_010_shrink_200_scores.txt")
+ms_prs_pval_010_shrink_200_scores <- scan("~/rezultatai/ms_prs_pval_010_shrink_200_scores.txt")
 print("Filtravimo su p-reikšme 0.1 ir shrink parametru 2.0 įverčiai:")
 ms_prs_pval_010_shrink_200_scores
 
@@ -455,7 +455,7 @@ z_ms_prs_pval_010_shrink_200_se <- sd(z_ms_prs_pval_010_shrink_200_scores) / sqr
 print("Normalizuotų įverčių standartinė paklaida:")
 z_ms_prs_pval_010_shrink_200_se
 
-ms_prs_pval_005_shrink_050_scores <- scan("~/rezultatai/ms_prs_005_shrink_050_scores.txt")
+ms_prs_pval_005_shrink_050_scores <- scan("~/rezultatai/ms_prs_pval_005_shrink_050_scores.txt")
 print("Filtravimo su p-reikšme 0.05 ir shrink parametru 0.5 įverčiai:")
 ms_prs_pval_005_shrink_050_scores
 
@@ -489,7 +489,7 @@ z_ms_prs_pval_005_shrink_050_se <- sd(z_ms_prs_pval_005_shrink_050_scores) / sqr
 print("Normalizuotų įverčių standartinė paklaida:")
 z_ms_prs_pval_005_shrink_050_se
 
-ms_prs_pval_005_shrink_200_scores <- scan("~/rezultatai/ms_prs_005_shrink_200_scores.txt")
+ms_prs_pval_005_shrink_200_scores <- scan("~/rezultatai/ms_prs_pval_005_shrink_200_scores.txt")
 print("Filtravimo su p-reikšme 0.05 ir shrink parametru 2.0 įverčiai:")
 ms_prs_pval_005_shrink_200_scores
 
@@ -523,4 +523,43 @@ z_ms_prs_pval_005_shrink_200_se <- sd(z_ms_prs_pval_005_shrink_200_scores) / sqr
 print("Normalizuotų įverčių standartinė paklaida:")
 z_ms_prs_pval_005_shrink_200_se
 
+z_scores_shrink <- data.frame(
+  z_ms_prs_pval_005_shrink_050_scores = z_ms_prs_pval_005_shrink_050_scores,
+  z_ms_prs_pval_005_shrink_200_scores = z_ms_prs_pval_005_shrink_200_scores,
+  z_ms_prs_pval_010_shrink_050_scores = z_ms_prs_pval_010_shrink_050_scores,
+  z_ms_prs_pval_010_shrink_200_scores = z_ms_prs_pval_010_shrink_200_scores
+)
+
+z_scores_shrink$number <- 1:nrow(z_scores_shrink)
+
+z_scores_shrink$number <- factor(z_scores_shrink$number, levels = z_scores_shrink$number)
+z_scores_shrink
+
+z_scores_shrink_long <- reshape(z_scores_shrink,
+                              direction = "long",
+                              idvar = "number",
+                              varying = list(names(z_scores_shrink)[1:4]),
+                              v.names = "scores",
+                              timevar = "p_val",
+                              times = c("p_val_005_050","p_val_005_200","p_val_010_050","p_val_010_200"))
+z_scores_shrink_long
+
+z_scores_shrink_graph <- ggplot(z_scores_shrink_long, aes(x = factor(number), y = scores, fill = p_val)) +
+                         geom_col(position = "stack") +
+                         coord_flip() +
+                         labs(x = "Tiriamieji",
+                              y = "Standartinio nuokrypio vienetai",
+                              title = "Normalizuoti genetinės rizikos įverčiai") +
+                         theme_minimal() +
+                         theme(panel.grid.major.y = element_blank(),
+                               axis.text.y = element_blank(),
+                               plot.title = element_text(size = 18, hjust = 0.5, margin = margin(t = 20, b = 20)),
+                               axis.title = element_text(size = 14, hjust = 0.5, margin = margin(t = 20, b = 20)),
+                               axis.title.x = element_text(margin = margin(t = 20, b = 20), face = "italic"),
+                               axis.title.y = element_text(margin = margin(t = 20, b = 20), face = "italic"),
+                               legend.position = "bottom") +
+                         scale_fill_discrete(labels = c("0.05 ir 0.5", "0.05 ir 2.0", "0.1 ir 0.5", "0.1 ir 2.0")) +
+                         labs(fill = "p-reikšmė ir 'shrinkage'")
+
+ggsave("~/grafikai/shrink_scores.png", plot = z_scores_shrink_graph, bg = "white")
 
