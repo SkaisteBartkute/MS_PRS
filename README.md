@@ -29,12 +29,59 @@ window is 50 SNPs.
 
 **'iterate_over_chromosomes'** - calculates the start and end points in the base data to calculate LD matrices in 
 'shrink_effect_sizes.'
+
 **'calculate_PRS_score'** - sums the SNP effect sizes that are multiplied by the recoded genotype (PRS is calculated for each
 individual in target data).
+
 **'calculate_shrunk_PRS_score'** - uses the posterior mean effects for calculation.
-**'calculate_PRS_SE'** - calculates SE for each PRS score from individual effect size standard effors.
+
+**'calculate_PRS_SE'** - calculates SE for each PRS score from individual effect size standard errors.
+
 **'thresholding_by_pvalue_PRS'** - full pipeline to calculate PRS using p-value thresholding.
+
 **'LD_clumping_PRS'** - full pipeline to calculate PRS using LD clumping.
+
+**'thresholding_and_clumping_PRS'** - full pipeline to calculate PRS using p-value thresholding and LD clumping.
+
 **'thresholding_and_shrinking_PRS'** - full pipeline to calculate PRS using p-value thresholding and shrinking.
+
 **'choose_command_line_option'** - implements switching between PRS calculation methods and passing parameters to these 
 methods.
+
+## Dependencies and versions:
+
+Python - version 3.8.10
+
+The program uses packages 'tabix' and 'numpy'.
+
+## Usage of the program:
+
+The first input file of the program - a sorted GWAS summary statistics vcf file. The second input file of the program
+is a sorted merged annotated target data vcf.gz file with genotypes of individuals. The target data should have also have
+an indexing 'tbi' file in the same directory it's called from.
+
+The program has four different modes:
+
+**p_val_threshold** - full pipeline to calculate PRS using p-value thresholding. The given parameter is p-value.
+
+`python3 ms_prs.py base_data.sorted.vcf target_data.vcf.gz p_val_threshold 0.05`
+
+**LD_clump** - full pipeline to calculate PRS using LD clumping. The given parameter is r2 threshold.
+
+`python3 ms_prs.py base_data.sorted.vcf target_data.vcf.gz LD_clump 0.1`
+
+**p_val_LD_clump** - full pipeline to calculate PRS using p-value thresholding and LD clumping. The first given parameter i
+p-value, the second is r2 threshold.
+
+`python3 ms_prs.py base_data.sorted.vcf target_data.vcf.gz p_val_LD_clump 0.05 0.1`
+
+**p_val_shrinkage** - full pipeline to calculate PRS using p-value thresholding and shrinking. The first given parameter is
+p-value, the second is shrinkage.
+
+`python3 ms_prs.py base_data.sorted.vcf target_data.vcf.gz p_val_shrinkage 0.05 2.0`
+
+## R-script.
+
+The R-script analyzes calculated PRS scores and normalizes them using 'z-score' normalization.
+Outputs the summary statistics of the scores and creates graphs comparing the normalized scores between different PRS
+calculation methods.
