@@ -80,6 +80,32 @@ p-value, the second is shrinkage.
 
 `python3 ms_prs.py base_data.sorted.vcf target_data.vcf.gz p_val_shrinkage 0.05 2.0`
 
+## File format.
+
+### Base data (GWAS summary statistics) file format:
+
+`CHROM POS ID REF ALT QUAL FILTER FORMAT [data displayed like format]`
+
+**FORMAT** is **'ES:SE:LP:ID'**.
+
+**ES** - *'effect size estimate relative to the alternate allele'.*
+
+**SE** - *'standard error of effect size estimate'.*
+
+**LP** - *'-log10 p-value for effect estimate'.*
+
+**ID** - *'study variant identifier'.*
+
+### Target data (individual genotype) file format for n individuals:
+
+`CHROM POS ID REF ALT QUAL FILTER INFO FORMAT [genotype]*n`
+
+**FORMAT** is **'GT:PL'**.
+
+**GT** - *'genotype'.*
+
+**PL** - *'List of Phred scaled genotype likelyhoods'.*
+
 ## R-script.
 
 The R-script analyzes calculated PRS scores and normalizes them using 'z-score' normalization.
