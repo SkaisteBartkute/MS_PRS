@@ -21,7 +21,7 @@ z_ms_prs_pval_001_scores <- as.numeric(scale(ms_prs_pval_001_scores))
 print("Normalizuoti filtravimo su p reikšme 0.01 įverčiai:")
 z_ms_prs_pval_001_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_001_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_001_scores)
@@ -55,7 +55,7 @@ z_ms_prs_pval_005_scores <- as.numeric(scale(ms_prs_pval_005_scores))
 print("Normalizuoti filtravimo su p reikšme 0.05 įverčiai:")
 z_ms_prs_pval_005_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_005_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_005_scores)
@@ -89,7 +89,7 @@ z_ms_prs_pval_010_scores <- as.numeric(scale(ms_prs_pval_010_scores))
 print("Normalizuoti filtravimo su p reikšme 0.1 įverčiai:")
 z_ms_prs_pval_010_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_010_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_010_scores)
@@ -123,7 +123,7 @@ z_ms_prs_pval_050_scores <- as.numeric(scale(ms_prs_pval_050_scores))
 print("Normalizuoti filtravimo su p reikšme 0.5 įverčiai:")
 z_ms_prs_pval_050_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_050_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_050_scores)
@@ -199,7 +199,7 @@ z_ms_prs_pval_001_LD_010_scores <- as.numeric(scale(ms_prs_pval_001_LD_010_score
 print("Normalizuoti filtravimo su p reikšme 0.01 ir r2 0.1 įverčiai:")
 z_ms_prs_pval_001_LD_010_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_001_LD_010_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_001_LD_010_scores)
@@ -233,7 +233,7 @@ z_ms_prs_pval_005_LD_010_scores <- as.numeric(scale(ms_prs_pval_005_LD_010_score
 print("Normalizuoti filtravimo su p reikšme 0.05 ir r2 0.1 įverčiai:")
 z_ms_prs_pval_005_LD_010_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_005_LD_010_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_005_LD_010_scores)
@@ -267,7 +267,7 @@ z_ms_prs_pval_010_LD_010_scores <- as.numeric(scale(ms_prs_pval_010_LD_010_score
 print("Normalizuoti filtravimo su p reikšme 0.1 ir r2 0.1 įverčiai:")
 z_ms_prs_pval_010_LD_010_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_010_LD_010_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_010_LD_010_scores)
@@ -301,7 +301,7 @@ z_ms_prs_pval_050_LD_010_scores <- as.numeric(scale(ms_prs_pval_050_LD_010_score
 print("Normalizuoti filtravimo su p reikšme 0.5 ir r2 0.1 įverčiai:")
 z_ms_prs_pval_050_LD_010_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_050_LD_010_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_050_LD_010_scores)
@@ -410,7 +410,7 @@ z_ms_prs_pval_010_shrink_050_scores <- as.numeric(scale(ms_prs_pval_010_shrink_0
 print("Normalizuoti filtravimo su p-reikšme 0.1 ir shrink parametru 0.5 įverčiai:")
 z_ms_prs_pval_010_shrink_050_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_010_shrink_050_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_010_shrink_050_scores)
@@ -444,7 +444,7 @@ z_ms_prs_pval_010_shrink_200_scores <- as.numeric(scale(ms_prs_pval_010_shrink_2
 print("Normalizuoti filtravimo su p-reikšme 0.1 ir shrink parametru 2.0 įverčiai:")
 z_ms_prs_pval_010_shrink_200_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_010_shrink_200_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_010_shrink_200_scores)
@@ -478,7 +478,7 @@ z_ms_prs_pval_005_shrink_050_scores <- as.numeric(scale(ms_prs_pval_005_shrink_0
 print("Normalizuoti filtravimo su p-reikšme 0.05 ir shrink parametru 0.5 įverčiai:")
 z_ms_prs_pval_005_shrink_050_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_005_shrink_050_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_005_shrink_050_scores)
@@ -512,7 +512,7 @@ z_ms_prs_pval_005_shrink_200_scores <- as.numeric(scale(ms_prs_pval_005_shrink_2
 print("Normalizuoti filtravimo su p-reikšme 0.05 ir shrink parametru 2.0 įverčiai:")
 z_ms_prs_pval_005_shrink_200_scores
 
-print("Normalizuotų įverčių vidurkis:")
+print("Normalizuotų įverčių mediana:")
 median(z_ms_prs_pval_005_shrink_200_scores)
 print("Normalizuotų įverčių minimumas:")
 min(z_ms_prs_pval_005_shrink_200_scores)
