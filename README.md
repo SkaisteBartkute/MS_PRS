@@ -80,7 +80,7 @@ p-value, the second is shrinkage.
 
 `python3 ms_prs.py base_data.sorted.vcf target_data.vcf.gz p_val_shrinkage 0.05 2.0`
 
-## File format.
+## File format:
 
 ### Base data (GWAS summary statistics) file format:
 
@@ -106,8 +106,35 @@ p-value, the second is shrinkage.
 
 **PL** - *'List of Phred scaled genotype likelyhoods'.*
 
-## R-script.
+## R-script:
 
 The R-script analyzes calculated PRS scores and normalizes them using 'z-score' normalization.
 Outputs the summary statistics of the scores and creates graphs comparing the normalized scores between different PRS
 calculation methods.
+
+## Testing of the program:
+
+**synthetic_vcf_generator.py** is an AI generated program that creates synthetic target data files according to the
+supplied GWAS summary statistics base data file.
+
+'synthetic.vcf.gz' and 'synthetic.vcf.gz.tbi' were created from OpenGWAS.io database GWAS summary statistics file with ID
+'ieu-b-18' (this file was aligned to the GRCh38 genome, indexed and sorted, first 250 lines and last 10 lines of this file
+were concatenated, after that the last record with X chromosome was removed because of ambiguity while calculating PRS).
+
+'synthetic.vcf.gz' and 'synthetic.vcf.gz.tbi' are just examples.
+
+### Creating synthetic files from given GWAS summary statistics:
+
+`-i` is the input file.
+
+`-o` is the output file.
+
+`-n` is the number of individuals for PRS calculation. 
+
+`python3 synthetic_vcf_generator.py -i base_data.sorted.vcf -o synthetic.vcf -n 5`
+
+`bgzip synthetic.vcf`
+
+`tabix -p vcf synthetic.vcf.gz`
+
+The program is then tested with the GWAS summary statistics it was created from and the synthetic target data.
